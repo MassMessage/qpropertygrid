@@ -28,8 +28,8 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#include "PropertyModel.h"
-#include "PropertyItem.h"
+#include "model/PropertyModel.h"
+#include "items/PropertyItem.h"
 #include <QDebug>
 
 PropertyModel::PropertyModel( QObject * parent  )

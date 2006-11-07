@@ -33,8 +33,8 @@
 #include <QObject>
 #include <QVariant>
 #include <QHash>
-#include "TreeContainer.h"
-#include "PropertyItemDefaultValueHolder.h"
+#include "core/TreeContainer.h"
+#include "items/PropertyItemDefaultValueHolder.h"
 class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
     Q_OBJECT;
   protected:
