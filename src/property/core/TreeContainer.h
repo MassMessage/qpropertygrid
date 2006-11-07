@@ -38,7 +38,7 @@ class TreeContainer {
     QList<T*>_treeChild;
   public:
     TreeContainer( T * parent = 0 );
-    T* parent() const;
+    T* parentInTree() const;
     void reparent( T * );
     void addChild( T * );
     void removeChild( T* );
@@ -47,8 +47,8 @@ class TreeContainer {
     T*childAt( int ) const;
     T*nextSibling();
     T*prevSibling();
-    int indexOfChild( T * ) const;
-    int index();
+    int indexOfChild( const T * ) const;
+    int index() const;
     bool isRoot() const;
     bool isLeaf() const;
     bool hasNextSibling();
@@ -64,7 +64,7 @@ TreeContainer<T>::TreeContainer( T * parent )
   }
 
 template <typename T>
-T* TreeContainer<T>::parent() const {
+T* TreeContainer<T>::parentInTree() const {
   return _treeParent;
   }
 
@@ -124,16 +124,16 @@ T* TreeContainer<T>::prevSibling() {
   }
 
 template <typename T>
-int TreeContainer<T>::indexOfChild( T* child ) const {
-  return _treeChild.indexOf( child );
+int TreeContainer<T>::indexOfChild(const T* child ) const {
+  return _treeChild.indexOf( const_cast<T*>(child) ); //hum... bizzard qu'il faille un const_cast
 
   }
 
 template <typename T>
-int TreeContainer<T>::index() {
+int TreeContainer<T>::index() const {
   if ( isRoot() )
     return 0;
-  return _treeParent->indexOfChild( this );
+  return _treeParent->indexOfChild( static_cast<const T*>(this) );
   }
 
 template <typename T>

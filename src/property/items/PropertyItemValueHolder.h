@@ -39,5 +39,7 @@ class PropertyItemValueHolder {
     virtual ~PropertyItemValueHolder() {};
     virtual void set( const PropertyItem *item, const QVariant &value = QVariant() ) = 0;
     virtual QVariant get( const PropertyItem *item ) = 0;
+    virtual QVariant getForRenderer(const PropertyItem *item ){return get(item);};
+
   };
 #endif

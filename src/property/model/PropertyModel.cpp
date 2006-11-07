@@ -43,11 +43,11 @@ PropertyModel::PropertyModel( QObject * parent  )
 int PropertyModel::columnCount ( const QModelIndex & parent  ) const
 {
     if (!parent.isValid())
-        return _root->colCount();
+        return _root->columnCount();
     PropertyItem *item = static_cast<PropertyItem*>(parent.internalPointer());
     if(item)
-        return item->colCount();
-    return _root->colCount();
+        return item->columnCount();
+    return _root->columnCount();
 }
 
 QVariant PropertyModel::data ( const QModelIndex & index, int role) const
@@ -112,7 +112,7 @@ QModelIndex PropertyModel::parent ( const QModelIndex & index ) const
         return QModelIndex();
     if(item->isRoot())
         return QModelIndex();
-    PropertyItem *parentItem=item->parent();
+    PropertyItem *parentItem=item->parentInTree();
     if(parentItem==_root)
         return QModelIndex();
     if(parentItem==NULL)
