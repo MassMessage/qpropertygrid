@@ -35,10 +35,16 @@ PropertyItem::PropertyItem( QString name, PropertyItem *parent, PropertyItemValu
     , TreeContainer<PropertyItem>( parent )
     , _valueHolder( setGet )
     , _columnCount( 2 )
-    , _flags( 0 )    //invalid entres autres
+    , _flags( 0 )     //invalid entres autres
 , _data() {
   setName( name );
   setValid( true );
+  }
+
+
+PropertyItem::~PropertyItem() {
+  if ( _valueHolder )
+    delete _valueHolder;
   }
 
 QString PropertyItem::name() const {
@@ -80,6 +86,18 @@ void PropertyItem::setData( int id, const QVariant &extra ) {
   _data[ id ] = extra;
   }
 
+ void PropertyItem::setValueHolder(PropertyItemValueHolder* newHolder)
+{
+if ( _valueHolder )
+    delete _valueHolder;
+_valueHolder=newHolder;
+
+}
+
+ const PropertyItemValueHolder* PropertyItem::valueHolder()const
+{
+return _valueHolder;
+}
 
 //manip des flags
 unsigned long PropertyItem::flags() const {

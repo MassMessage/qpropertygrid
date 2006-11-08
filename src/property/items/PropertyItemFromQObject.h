@@ -28,77 +28,22 @@
 *   you do not wish to do so, delete this exception statement from        *
 *   your version.                                                         *
 ***************************************************************************/
-#ifndef PROPERTYITEM_H
-#define PROPERTYITEM_H
-#include <QObject>
-#include <QVariant>
-#include <QHash>
-#include "core/TreeContainer.h"
-#include "items/PropertyItemDefaultValueHolder.h"
-class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
+#ifndef PROPERTYITEMFROMQOBJECT_H
+#define PROPERTYITEMFROMQOBJECT_H
+#include "core/abstractfactory.h"
+class PropertyItem;
+class PropertyItemFromQObject : public QObject {
+
     Q_OBJECT;
   protected:
 
-    PropertyItemValueHolder *_valueHolder;
-    int _columnCount;
-    unsigned long _flags;
-    QHash<int, QVariant> _data;
+    Factory<>*_itemFactory;
+    void importPropertyForClass( const QObject *object, const QMetaObject *metaobject = 0, PropertyItem*parent = 0 );
   public:
+    PropertyItemFromQObject( Factory<>*fact, QObject *parent = 0 );
+    PropertyItem*importFrom(const QObject *obj,PropertyItem*parent,bool createSection=true);
 
-    enum propertyRoles{
-      nameValueRole = Qt::UserRole,
-      nameRendererRole,
-      valueRole,
-      valueRendererRole,
-      valueEditorRole,
-      endvalue
   };
-
-
-    enum propertyDataFlags{
-      flgValid = 0x1,
-      flgData = 0x2,
-      flgSection = 0x4,
-      flgGroup = 0x8,
-      flgHidden = 0x10,
-      flgSystem = 0x20,
-      flgRDOnly = 0x40,
-      flgMeta = 0x80
-  };
-
-  public:
-
-    PropertyItem( QString name = "", PropertyItem *parent = 0 ,PropertyItemValueHolder* setGet=new PropertyItemDefaultValueHolder());
-    virtual ~PropertyItem();
-    //manip des propietes
-    QString name() const;
-    void setName( QString name );
-    int columnCount() const;
-    void setColumnCount( int count );
-    virtual QVariant data( int id= valueRole) const;
-    void setData( const QVariant & );
-    void setData( int id, const QVariant & );
-    void setValueHolder(PropertyItemValueHolder* newHolder);
-    const PropertyItemValueHolder* valueHolder()const;
-    //manip des flags
-    unsigned long flags() const;
-    void setFlags( const unsigned long &fl );
-    bool isValid() const;
-    bool hasData() const;
-    bool isVisible() const;
-    bool isASection() const;
-    bool isAGroup() const;
-    bool isSystem() const;
-    bool isReadonly() const;
-    void setValid( bool );
-    void setVisible( bool );
-    void setSection( bool );
-    void setGroup( bool );
-    void setSystem( bool );
-    void setReadOnly( bool );
-  };
-
-
 
 #endif
 

@@ -75,6 +75,9 @@ bool PropertyModel::setData ( const QModelIndex & index, const QVariant & value,
     PropertyItem *item = static_cast<PropertyItem*>(index.internalPointer());
     if(!item)
         return false;
+if(role==Qt::EditRole)
+    role=PropertyItem::valueRole;
+
     item->setData( role,value);
     if(role==PropertyItem::valueRole)
     {

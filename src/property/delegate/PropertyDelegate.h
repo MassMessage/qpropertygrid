@@ -28,77 +28,27 @@
 *   you do not wish to do so, delete this exception statement from        *
 *   your version.                                                         *
 ***************************************************************************/
-#ifndef PROPERTYITEM_H
-#define PROPERTYITEM_H
-#include <QObject>
-#include <QVariant>
-#include <QHash>
-#include "core/TreeContainer.h"
-#include "items/PropertyItemDefaultValueHolder.h"
-class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
+#ifndef PROPERTYDELEGATE_H
+#define PROPERTYDELEGATE_H
+#include "core/abstractfactory.h"
+#include "items/PropertyItem.h"
+#include <QItemDelegate>
+class PropertyDelegate : public QItemDelegate {
     Q_OBJECT;
   protected:
-
-    PropertyItemValueHolder *_valueHolder;
-    int _columnCount;
-    unsigned long _flags;
-    QHash<int, QVariant> _data;
+    Factory<> *_factory;
+    PropertyItem * toItem( const QModelIndex & index ) const;
+/*    PropertyRenderer *getRendererFor( const QModelIndex & index ) const;
+    PropertyEditor *getEditorFor( const QModelIndex & index ) const;*/
   public:
-
-    enum propertyRoles{
-      nameValueRole = Qt::UserRole,
-      nameRendererRole,
-      valueRole,
-      valueRendererRole,
-      valueEditorRole,
-      endvalue
+    PropertyDelegate ( Factory<> *delegateFactory=0, QObject * parent = 0 );
+    virtual QWidget * createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const;
+    virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const;
+    virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index ) const ;
   };
-
-
-    enum propertyDataFlags{
-      flgValid = 0x1,
-      flgData = 0x2,
-      flgSection = 0x4,
-      flgGroup = 0x8,
-      flgHidden = 0x10,
-      flgSystem = 0x20,
-      flgRDOnly = 0x40,
-      flgMeta = 0x80
-  };
-
-  public:
-
-    PropertyItem( QString name = "", PropertyItem *parent = 0 ,PropertyItemValueHolder* setGet=new PropertyItemDefaultValueHolder());
-    virtual ~PropertyItem();
-    //manip des propietes
-    QString name() const;
-    void setName( QString name );
-    int columnCount() const;
-    void setColumnCount( int count );
-    virtual QVariant data( int id= valueRole) const;
-    void setData( const QVariant & );
-    void setData( int id, const QVariant & );
-    void setValueHolder(PropertyItemValueHolder* newHolder);
-    const PropertyItemValueHolder* valueHolder()const;
-    //manip des flags
-    unsigned long flags() const;
-    void setFlags( const unsigned long &fl );
-    bool isValid() const;
-    bool hasData() const;
-    bool isVisible() const;
-    bool isASection() const;
-    bool isAGroup() const;
-    bool isSystem() const;
-    bool isReadonly() const;
-    void setValid( bool );
-    void setVisible( bool );
-    void setSection( bool );
-    void setGroup( bool );
-    void setSystem( bool );
-    void setReadOnly( bool );
-  };
-
 
 
 #endif
-
