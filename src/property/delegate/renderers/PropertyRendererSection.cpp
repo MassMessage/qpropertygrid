@@ -28,14 +28,50 @@
 *   you do not wish to do so, delete this exception statement from        *
 *   your version.                                                         *
 ***************************************************************************/
-#include "items/PropertyItemSection.h"
 #include "delegate/renderers/PropertyRendererSection.h"
-PropertyItemSection::PropertyItemSection(QString name,PropertyItem *parent)
-:PropertyItem(name,parent)
-	{
-	setSection(true);
-	setReadOnly(true);
-        setSameRendererForBoth(PropertyRendererSection::K_ID);
-        //setData(nameRendererRole,PropertySectionRenderer::RENDER_KEY);
-	//setData(valueRendererRole,PropertySectionRenderer::RENDER_KEY);
-	}
+#include <QApplication>
+ #include <QPaintDevice>
+
+const QString PropertyRendererSection::K_ID="RENDER_SECTION_DEF";
+
+PropertyRendererSection::PropertyRendererSection( QObject *parent )
+    : PropertyRenderer( parent ) {
+
+  }
+
+void PropertyRendererSection::paintProperty ( QPainter * painter, const QStyleOptionViewItem &option, const QModelIndex &index  ) {
+static const int i = 9;
+PropertyItem *data=modelIndexToData(index);
+        if(data==0)
+          return;
+
+QRect backRect = option.rect;
+        painter->setBrush(option.palette.brush( QPalette::Button));
+//painter->setBrush(QColor(255,0,0));
+//painter->setPen(Qt::NoPen);
+ //       backRect.setX(i*2);
+  //      painter->drawRect(backRect);
+//QPalette::ButtonText
+painter->save();
+painter->setPen(option.palette.color( QPalette::Dark));
+/*if(index.column()>0)
+        return;*/
+ // draw text
+
+        QRect r = option.rect;
+
+        QRect textrect = QRect(r.left() + i*2, r.top(), r.width() - ((5*i)/2), r.height());
+        QString text = option.fontMetrics.elidedText(data->name(), Qt::ElideMiddle, textrect.width()
+            );
+painter->setBrush(QColor(255,0,0));
+painter->setPen(QColor(0,0,255));
+        painter->drawText(textrect,text,QTextOption( Qt::AlignCenter));
+
+painter->restore();
+}
+
+
+QSize PropertyRendererSection::sizeHint( const QStyleOptionViewItem & option, const QModelIndex &index  ) {
+return option.rect.size();
+  }
+

@@ -28,14 +28,13 @@
 *   you do not wish to do so, delete this exception statement from        *
 *   your version.                                                         *
 ***************************************************************************/
-#include "items/PropertyItemSection.h"
+#include "delegate/PropertyDelegateFactory.h"
 #include "delegate/renderers/PropertyRendererSection.h"
-PropertyItemSection::PropertyItemSection(QString name,PropertyItem *parent)
-:PropertyItem(name,parent)
-	{
-	setSection(true);
-	setReadOnly(true);
-        setSameRendererForBoth(PropertyRendererSection::K_ID);
-        //setData(nameRendererRole,PropertySectionRenderer::RENDER_KEY);
-	//setData(valueRendererRole,PropertySectionRenderer::RENDER_KEY);
-	}
+#include "defaulttype/TypeBool.h"
+const QString PropertyDelegateFactory::K_DEFAULT_KEY = "##DEFAULT##";
+
+
+void PropertyDelegateFactory:: onSingletonConstruct() {
+  instance().add<PropertyRendererSection>( PropertyRendererSection::K_ID );
+  instance().add<PropertyRendererBool>(PropertyRendererBool::K_ID);
+  }

@@ -30,7 +30,7 @@
 ***************************************************************************/
 #ifndef PROPERTYITEMFROMQOBJECT_H
 #define PROPERTYITEMFROMQOBJECT_H
-#include "core/abstractfactory.h"
+#include "core/Abstractfactory.h"
 class PropertyItem;
 class PropertyItemFromQObject : public QObject {
 
@@ -39,10 +39,10 @@ class PropertyItemFromQObject : public QObject {
 
     Factory<>*_itemFactory;
     void importPropertyForClass( const QObject *object, const QMetaObject *metaobject = 0, PropertyItem*parent = 0 );
+    PropertyItem*  buildPropertyItem(const QObject *object,QMetaProperty &qmprop,PropertyItem *parent=0);
   public:
     PropertyItemFromQObject( Factory<>*fact, QObject *parent = 0 );
     PropertyItem*importFrom(const QObject *obj,PropertyItem*parent,bool createSection=true);
-
   };
 
 #endif

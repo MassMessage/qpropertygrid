@@ -29,11 +29,50 @@
  *   your version.                                                         *
  ***************************************************************************/
 #include "PropertyTreeBrowser.h"
-
-
+#include <QDebug>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QStyleOptionButton>
 PropertyTreeBrowser::PropertyTreeBrowser(QWidget*w)
 :QTreeView(w)
 {
+}
 
+
+
+
+void PropertyTreeBrowser::drawBranches ( QPainter * painter, const QRect & rect, const QModelIndex & index ) const
+{
+if(!index.isValid())
+        return;
+static const int i = 9;
+QRect gutterRect(rect.left(), rect.top() ,i*2,rect.height());
+painter->save();
+painter->setPen(Qt::NoPen);
+painter->setBrush(palette().brush( QPalette::Button));
+painter->drawRect( gutterRect);
+painter->restore();
+if(index.model()->hasChildren(index)==false)
+ return;
+QStyleOption branchOption;
+
+        branchOption.rect = QRect(rect.left() + i/2, rect.top() + (rect.height() - i)/2, i, i);
+        //branchOption.palette = option.palette;
+        branchOption.state = QStyle::State_Children;
+        if (isExpanded(index))
+            branchOption.state |= QStyle::State_Open;
+       style()->drawPrimitive(QStyle::PE_IndicatorBranch, &branchOption, painter,this);
+}
+
+
+void  PropertyTreeBrowser::drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+static const int i = 9;
+QTreeView::drawRow(painter,option,index);
+/*QRect rect=option.rect;
+QRect gutterRect(i*2, rect.top() ,width(),rect.height());
+if(index.model()->hasChildren(index)==false&&index.sibling(index.row()+1,index.column()).isValid())
+return;
+painter->drawRect( gutterRect);*/
 
 }

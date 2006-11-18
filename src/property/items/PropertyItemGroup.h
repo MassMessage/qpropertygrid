@@ -28,14 +28,19 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#include "PropertyItemFromQVariant.h"
+#ifndef PROPERTYITEMGROUPITEM_H
+#define PROPERTYITEMGROUPITEM_H
+#include "items/PropertyItem.h"
 
-PropertyItem* PropertyItemFromQVariant::fromQVariant(const QVariant&,const QString &name)const
+
+class PropertyItemGroup : public PropertyItem
 {
+        Q_OBJECT;
+public:
+        PropertyItemGroup(QString name,PropertyItem *parent=0);
 
-return 0;
-
-}
+};
 
 
 
+#endif

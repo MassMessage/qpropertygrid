@@ -35,11 +35,11 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
 
 
-    //QTreeView widget;
+
    // widget.setModel(model);
     //widget.setItemDelegate(new PropertyDelegate());
- //   widget.show();
-     sampleForm m;
-     m.show();
+
+ sampleForm m;
+m.show();
     return app.exec();
 }

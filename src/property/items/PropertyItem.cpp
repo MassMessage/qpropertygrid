@@ -29,16 +29,17 @@
 *   your version.                                                         *
 ***************************************************************************/
 #include "PropertyItem.h"
-
+#include <QDebug>
 PropertyItem::PropertyItem( QString name, PropertyItem *parent, PropertyItemValueHolder* setGet )
     : QObject()
     , TreeContainer<PropertyItem>( parent )
     , _valueHolder( setGet )
     , _columnCount( 2 )
-    , _flags( 0 )     //invalid entres autres
+    , _flags( 0 )      //invalid entres autres
 , _data() {
   setName( name );
   setValid( true );
+  setData( rollRole, true );
   }
 
 
@@ -86,19 +87,55 @@ void PropertyItem::setData( int id, const QVariant &extra ) {
   _data[ id ] = extra;
   }
 
- void PropertyItem::setValueHolder(PropertyItemValueHolder* newHolder)
-{
-if ( _valueHolder )
+void PropertyItem::setValueHolder( PropertyItemValueHolder* newHolder ) {
+  if ( _valueHolder )
     delete _valueHolder;
-_valueHolder=newHolder;
+  _valueHolder = newHolder;
 
-}
+  }
 
- const PropertyItemValueHolder* PropertyItem::valueHolder()const
-{
-return _valueHolder;
-}
+const PropertyItemValueHolder* PropertyItem::valueHolder() const {
+  return _valueHolder;
+  }
 
+void PropertyItem::setSameRendererForBoth( QString name ) {
+setValueRenderer(name);
+setNameRenderer(name);
+  }
+
+void PropertyItem::setRenderers( QString nameRendererName, QString valueRendererName ) {
+setNameRenderer(nameRendererName);
+setValueRenderer(valueRendererName);
+
+
+  }
+
+void PropertyItem::setValueRenderer( QString name ) {
+  if ( name.length() )
+    setData( valueRendererRole, name );
+  else
+    setData( valueRendererRole, QVariant() );
+  }
+
+QString PropertyItem::valueRenderer() const {
+  QVariant val = data( valueRendererRole );
+  if ( val.isValid() && val.canConvert( QVariant::String ) )
+    return val.toString();
+  return "";
+  }
+void PropertyItem::setNameRenderer( QString name ) {
+  if ( name.length() )
+    setData( nameRendererRole, name );
+  else
+    setData( nameRendererRole, QVariant() );
+  }
+
+QString PropertyItem::nameRenderer() const{
+  QVariant val = data( nameRendererRole );
+  if ( val.isValid() && val.canConvert( QVariant::String ) )
+    return val.toString();
+  return "";
+  }
 //manip des flags
 unsigned long PropertyItem::flags() const {
   return _flags;

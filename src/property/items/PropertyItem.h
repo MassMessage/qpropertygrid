@@ -35,6 +35,9 @@
 #include <QHash>
 #include "core/TreeContainer.h"
 #include "items/PropertyItemDefaultValueHolder.h"
+/**
+* \brief rassemble les infos d'une propriete
+*/
 class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
     Q_OBJECT;
   protected:
@@ -45,13 +48,15 @@ class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
     QHash<int, QVariant> _data;
   public:
 
+    //! An enum. definit les id a utiliser avec PropertyItem::setData() et PropertyItem::data()
     enum propertyRoles{
-      nameValueRole = Qt::UserRole,
-      nameRendererRole,
-      valueRole,
-      valueRendererRole,
-      valueEditorRole,
-      endvalue
+      nameValueRole = Qt::UserRole,  /*!<obtenir le nom de la propriete*/
+      nameRendererRole, /*!<obtenir le renderer pour le nom de la propriete*/
+      valueRole, /*!<obtenir la valeur de la propriete*/
+      valueRendererRole, /*!<obtenir le renderer pour la valeur de la propriete*/
+      valueEditorRole, /*!<obtenir l'editeur pour la valeur*/
+      rollRole,  /*!<Si la proprietes a des fils, sont t'ils caches (visuellement)*/
+      endvalue /*!<marque la fin de l'enum*/
   };
 
 
@@ -68,18 +73,24 @@ class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
 
   public:
 
-    PropertyItem( QString name = "", PropertyItem *parent = 0 ,PropertyItemValueHolder* setGet=new PropertyItemDefaultValueHolder());
+    PropertyItem( QString name = "", PropertyItem *parent = 0 , PropertyItemValueHolder* setGet = new PropertyItemDefaultValueHolder() );
     virtual ~PropertyItem();
     //manip des propietes
     QString name() const;
     void setName( QString name );
     int columnCount() const;
     void setColumnCount( int count );
-    virtual QVariant data( int id= valueRole) const;
+    virtual QVariant data( int id = valueRole ) const;
     void setData( const QVariant & );
     void setData( int id, const QVariant & );
-    void setValueHolder(PropertyItemValueHolder* newHolder);
-    const PropertyItemValueHolder* valueHolder()const;
+    void setValueHolder( PropertyItemValueHolder* newHolder );
+    const PropertyItemValueHolder* valueHolder() const;
+    void setSameRendererForBoth( QString name="" );
+    void setRenderers( QString nameRendererName="", QString valueRendererName="" ) ;
+    void setValueRenderer( QString name="" );
+    QString valueRenderer()const;
+    void setNameRenderer( QString name="" );
+    QString nameRenderer()const;
     //manip des flags
     unsigned long flags() const;
     void setFlags( const unsigned long &fl );

@@ -30,16 +30,17 @@
 ***************************************************************************/
 #ifndef PROPERTYDELEGATE_H
 #define PROPERTYDELEGATE_H
-#include "core/abstractfactory.h"
+#include "core/Abstractfactory.h"
 #include "items/PropertyItem.h"
+#include "delegate/PropertyRenderer.h"
 #include <QItemDelegate>
 class PropertyDelegate : public QItemDelegate {
     Q_OBJECT;
   protected:
     Factory<> *_factory;
     PropertyItem * toItem( const QModelIndex & index ) const;
-/*    PropertyRenderer *getRendererFor( const QModelIndex & index ) const;
-    PropertyEditor *getEditorFor( const QModelIndex & index ) const;*/
+   PropertyRenderer *getRendererFor( const QModelIndex & index ) const;
+    /*PropertyEditor *getEditorFor( const QModelIndex & index ) const;*/
   public:
     PropertyDelegate ( Factory<> *delegateFactory=0, QObject * parent = 0 );
     virtual QWidget * createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const;

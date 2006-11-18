@@ -28,16 +28,59 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#ifndef PROPERTYITEMFROMQVARIANT_H
-#define PROPERTYITEMFROMQVARIANT_H
-#include <QString>
-#include <QVariant>
-class PropertyItem;
-class PropertyItemFromQVariant
-{
-public:
-virtual PropertyItem* fromQVariant(const QVariant&,const QString &name="")const;
-};
+#include "TypeBool.h"
+#include <QApplication>
+#include <QDebug>
+ #include <QStyleOptionButton>
+PropertyItemBool::PropertyItemBool(QString name,const QVariant &value,PropertyItem *parent)
+:PropertyItem(name,parent)
+        {
+        setData(value);
+        setValueRenderer( PropertyRendererBool::K_ID);
+        ///setSameRendererForBoth(PropertyRendererBool::K_ID);
+        //setData(nameRendererRole,PropertySectionRenderer::RENDER_KEY);
+        //setData(valueRendererRole,PropertySectionRenderer::RENDER_KEY);
+        }
 
 
-#endif
+/////////////////////////////////////////////////////////////
+
+const QString PropertyRendererBool::K_ID="RENDER_BOOL_DEF";
+
+PropertyRendererBool::PropertyRendererBool( QObject *parent )
+    : PropertyRenderer( parent ) {
+
+  }
+
+void PropertyRendererBool::paintProperty ( QPainter * painter, const QStyleOptionViewItem &option, const QModelIndex &index  ) {
+static const int i = 14;
+PropertyItem *data=modelIndexToData(index);
+        if(data==0)
+          return;
+QRect rect=option.rect;
+QStyleOptionButton checkOption;
+checkOption.rect=QRect(rect.left() + i/2, rect.top() + (rect.height() - i)/2, i, i);
+   checkOption.state =QStyle::State_Off | QStyle::State_Enabled;
+   checkOption.text=tr("False");
+//QStyle::State_On|QStyle::State_Item ;
+  if (data->data().toBool())
+      {
+        checkOption.state |= QStyle::State_On;
+        checkOption.text=tr("True");
+}
+  QApplication::style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &checkOption, painter);
+ QRect textrect = QRect(rect.left() + i*2, rect.top(), rect.width() - ((5*i)/2), rect.height());
+ QString text = option.fontMetrics.elidedText(checkOption.text, Qt::ElideMiddle, textrect.width());
+painter->drawText(textrect,text,QTextOption( Qt::AlignLeft));
+
+return ;
+
+
+
+
+}
+
+
+QSize PropertyRendererBool::sizeHint( const QStyleOptionViewItem & option, const QModelIndex &index  ) {
+return option.rect.size();
+  }

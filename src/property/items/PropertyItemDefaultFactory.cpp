@@ -28,46 +28,115 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#include "mainform.h"
-#include <QMouseEvent>
-#include <QDebug>
-#include "items/PropertyItem.h"
-#include "items/PropertyItemFromQObject.h"
-#include "delegate/PropertyDelegate.h"
 #include "items/PropertyItemDefaultFactory.h"
-sampleForm::sampleForm()
-:QMainWindow(0)
-,Ui_MainWindow()
-,_tree()
-{
-setupUi(this);
-_tree.show();
-connect(getPropButton,SIGNAL(clicked(bool)),this,SLOT(onSelectWidget(bool)));
-}
+#include "items/PropertyItemProvider.h"
 
-void sampleForm::mouseReleaseEvent( QMouseEvent * event )
-{
-releaseMouse();
-QWidget *w=childAt(event->pos());
-if(!w)
-{
-  qDebug("Pas de widget");
-return;
-}
-PropertyModel *model=new PropertyModel();
-PropertyItemFromQObject *conv=new PropertyItemFromQObject(&PropertyItemDefaultFactory::instance());
-PropertyItem *it=conv->importFrom(w,0);
-model->add(it);
-_tree.setModel(model);
-_tree.setItemDelegate(new PropertyDelegate());
-_tree.show();
+const QString PropertyItemDefaultFactory::K_DEFAULT_KEY="##DEFAULT##";
 
 
-}
 
-
-void sampleForm::onSelectWidget(bool)
+void PropertyItemDefaultFactory::onSingletonConstruct()
 {
 
-grabMouse();
-}
+this->add<PropertyItemProvider>(K_DEFAULT_KEY,true);
+
+/*
+ switch ( variant.type() ) {
+      case QVariant::Invalid:
+      break;
+      case QVariant::BitArray:
+      break;
+      case QVariant::Bitmap :
+      break;
+      case QVariant::Bool:
+        return new PropertyItemBool(name,variant);
+      break;
+      case QVariant::Brush:
+      break;
+      case QVariant::ByteArray:
+      break;
+      case QVariant::Char:
+      break;
+      case QVariant::Color:
+      break;
+      case QVariant::Cursor:
+      break;
+      case QVariant::Date:
+      break;
+      case QVariant::DateTime:
+      break;
+      case QVariant::Double:
+      break;
+      case QVariant::Font:
+      break;
+      case QVariant::Icon :
+      break;
+      case QVariant::Image:
+      break;
+      case QVariant::Int:
+      break;
+      case QVariant::KeySequence:
+      break;
+      case QVariant::Line:
+      break;
+      case QVariant::LineF:
+      break;
+      case QVariant::List:
+      break;
+      case QVariant::Locale:
+      break;
+      case QVariant::LongLong:
+      break;
+      case QVariant::Map:
+      break;
+      case QVariant::Matrix:
+      break;
+      case QVariant::Palette:
+      break;
+      case QVariant::Pen:
+      break;
+      case QVariant::Pixmap:
+      break;
+      case QVariant::Point:
+      break;
+      case QVariant::PointF:
+      break;
+      case QVariant::Polygon :
+      break;
+      case QVariant::Rect:
+      break;
+      case QVariant::RectF:
+      break;
+      case QVariant::RegExp:
+      break;
+      case QVariant::Region:
+      break;
+      case QVariant::Size:
+      break;
+      case QVariant::SizeF:
+      break;
+      case QVariant::SizePolicy:
+      break;
+      case QVariant::String:
+      break;
+      case QVariant::StringList:
+      break;
+      case QVariant::TextFormat:
+      break;
+      case QVariant::TextLength:
+      break;
+      case QVariant::Time:
+      break;
+      case QVariant::UInt:
+      break;
+      case QVariant::ULongLong:
+      break;
+      case QVariant::Url:
+      break;
+      case QVariant::UserType :
+      break;
+      default:
+      break;
+*/
+
+};

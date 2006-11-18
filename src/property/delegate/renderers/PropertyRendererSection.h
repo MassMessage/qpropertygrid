@@ -28,18 +28,21 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#ifndef PROPERTYTREEBROWSER_H
-#define PROPERTYTREEBROWSER_H
-#include <QTreeView>
-class PropertyTreeBrowser : public QTreeView
+#ifndef PROPERTYRENDERERSECTION_H
+#define PROPERTYRENDERERSECTION_H
+#include "delegate/PropertyRenderer.h"
+
+class PropertyRendererSection : public PropertyRenderer
 {
 Q_OBJECT;
 
 public:
-PropertyTreeBrowser(QWidget*parent=0);
+        PropertyRendererSection(QObject *parent=0);
+        virtual void paintProperty ( QPainter * painter, const QStyleOptionViewItem &option,const QModelIndex &index=QModelIndex());
+        virtual QSize sizeHint(const QStyleOptionViewItem & option,const QModelIndex &index=QModelIndex());
 
-protected:
-void drawBranches ( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
-void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+static const QString K_ID;
 };
+
+
 #endif

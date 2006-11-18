@@ -28,18 +28,17 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#ifndef PROPERTYTREEBROWSER_H
-#define PROPERTYTREEBROWSER_H
-#include <QTreeView>
-class PropertyTreeBrowser : public QTreeView
+#ifndef PROPERTYITEMDEFAULTFACTORY_H
+#define PROPERTYITEMDEFAULTFACTORY_H
+#include "core/Abstractfactory.h"
+
+class PropertyItemDefaultFactory:public Singleton<PropertyItemDefaultFactory> , public Factory<>
 {
-Q_OBJECT;
-
 public:
-PropertyTreeBrowser(QWidget*parent=0);
+void onSingletonConstruct();
 
-protected:
-void drawBranches ( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
-void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+static const QString K_DEFAULT_KEY;
+
 };
+
 #endif
