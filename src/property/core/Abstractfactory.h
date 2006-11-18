@@ -44,6 +44,9 @@ class Singleton {
   protected:
     static T *_instance;
     Singleton();
+    virtual ~Singleton(){onSingletonDestruct();};
+virtual void onSingletonConstruct() {};
+    virtual void onSingletonDestruct() {};
   public:
     static T& instance();
   };
@@ -56,8 +59,10 @@ Singleton<T>::Singleton() {}
 
 template <typename T>
 T& Singleton<T>::instance() {
-  if ( _instance == NULL )
+  if ( _instance == NULL ) {
     _instance = new T();
+    _instance->onSingletonConstruct();
+    }
   return *_instance;
   }
 
@@ -124,17 +129,21 @@ class Factory {
     Factory();
     int loadPlugins( const QString &pluginsPath, const QString &pluginsPattern = "*" );
     template <class U>
-    void add( const K&id, bool useSingletonBuider = false );
-    void add( const K&id, AbstractItemBuilder* );
+    void add
+      ( const K&id, bool useSingletonBuider = false );
+    void add
+      ( const K&id, AbstractItemBuilder* );
     void removeAll( bool autodeleteBuilder = true );
-    void remove ( const K&id, bool autodeleteBuilder = true );
+    void remove
+      ( const K&id, bool autodeleteBuilder = true );
     int count() const;
     template <typename U>
     U* getAtIndex( int i ) const;
     AbstractItemBuilder* getBuilderAtIndex( int i ) const;
     const K& keyAtIndex( int i ) const;
     template <typename U>
-    U* get ( const K&id ) const;
+    U* get
+      ( const K&id ) const;
     AbstractItemBuilder* getBuilder( const K&id ) const;
     void merge( const Factory<>*other, bool keepMyBuilder = true, bool autodeleteBuilder = true );
     Factory<K> getACopy( bool useSameReferenceOnBuilder = false );
@@ -197,9 +206,9 @@ void Factory<K>::add
 
 
 template <typename K>
-void Factory<K>::removeAll( bool autodeleteBuilder) {
- //TODO gere le autodeleteBuilder
-        _hash.clear();
+void Factory<K>::removeAll( bool autodeleteBuilder ) {
+  //TODO gere le autodeleteBuilder
+  _hash.clear();
   }
 
 template <typename K>
@@ -258,7 +267,7 @@ AbstractItemBuilder* Factory<K>::getBuilder( const K&id ) const {
 template <typename K>
 void Factory<K>::merge( const Factory<>*other, bool keepMyBuilder, bool autodeleteBuilder ) {
   for ( int i = 0;i < other->count();i++ ) {
-    if ( getBuilder( other->keyAtIndex( i )!="" && keepMyBuilder ) )
+    if ( getBuilder( other->keyAtIndex( i ) != "" && keepMyBuilder ) )
       continue;
     else
       remove
