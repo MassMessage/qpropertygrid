@@ -35,11 +35,12 @@
 #include "items/PropertyItemQPropertyValueHolder.h"
 #include "items/PropertyItemSection.h"
 #include "items/PropertyItem.h"
-
+#include <QDebug>
 
 
 PropertyItemFromQObject::PropertyItemFromQObject( Factory<>*fact, QObject *parent )
     : QObject( parent )
+,_skipRO(true)
 , _itemFactory( fact ) {}
 
 
@@ -64,7 +65,9 @@ void PropertyItemFromQObject::importPropertyForClass( const QObject *object, con
 
 PropertyItem* PropertyItemFromQObject::buildPropertyItem( const QObject *object, QMetaProperty &qmprop, PropertyItem *parent ) {
   PropertyItem * prop = 0;
-  if ( _itemFactory && qmprop.read( object ).isValid() ) {
+if(!qmprop.isWritable()&&_skipRO)
+        return prop;
+  if ( _itemFactory && qmprop.read( object ).isValid()) {
     QString key = qmprop.read( object ).typeName();
     PropertyItemProvider *itemProvider = _itemFactory->get
                                          <PropertyItemProvider>( key );
@@ -81,13 +84,19 @@ PropertyItem* PropertyItemFromQObject::buildPropertyItem( const QObject *object,
     prop->setData( qmprop.read( object ) );
     }
 
+
+prop->setValueHolder( new PropertyItemQPropertyValueHolder(qmprop,const_cast<QObject*>(object)));
+
+
+
   return prop;
 
   }
 
 
-PropertyItem* PropertyItemFromQObject::importFrom( const QObject *obj, PropertyItem*parent, bool createSection ) {
-  if ( obj == 0 )
+PropertyItem* PropertyItemFromQObject::importFrom( const QObject *obj,bool skipReadOnly,PropertyItem*parent, bool createSection ) {
+_skipRO=skipReadOnly;
+ if ( obj == 0 )
     return parent;
   if ( parent == 0 )
     createSection = true;

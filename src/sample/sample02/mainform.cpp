@@ -56,7 +56,7 @@ return;
 }
 PropertyModel *model=new PropertyModel();
 PropertyItemFromQObject *conv=new PropertyItemFromQObject(&PropertyItemDefaultFactory::instance());
-PropertyItem *it=conv->importFrom(w,0);
+PropertyItem *it=conv->importFrom(w,true,0);
 model->add(it);
 _tree.setModel(model);
 _tree.setItemDelegate(new PropertyDelegate());

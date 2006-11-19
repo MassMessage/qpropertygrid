@@ -28,25 +28,85 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#ifndef PROPERTYITEMQPROPERTYVALUEHOLDER_H
-#define PROPERTYITEMQPROPERTYVALUEHOLDER_H
-#include <QVariant>
-#include <QMetaProperty>
+#ifndef PROPERTYITEMTRANSLATETABLE_H
+#define PROPERTYITEMTRANSLATETABLE_H
+
 #include <QObject>
-#include "items/PropertyItemValueHolder.h"
-class PropertyItem;
-class PropertyItemQPropertyValueHolder:public PropertyItemValueHolder {
+#include <QMetaEnum>
+#include <QVariant>
+#include <QList>
+class PropertyItemTranslateTable : public QObject
+{
+
+Q_OBJECT;
+public:
+enum translationPolicy{
+EInvalid,
+EPass,
+EReturnDefault
+};
 protected:
-QMetaProperty _meta;
-QObject *_object;
+class SValKey{
 
-  public:
-    PropertyItemQPropertyValueHolder(QMetaProperty property,QObject *object);
-    PropertyItemQPropertyValueHolder( const PropertyItemQPropertyValueHolder& );
-    virtual ~PropertyItemQPropertyValueHolder();
-    virtual void set( const PropertyItem *item, const QVariant &value = QVariant() );
-    virtual QVariant get( const PropertyItem *item );
-virtual QVariant getForRenderer( const PropertyItem *item );
+public:
+QVariant value;
+QVariant key;
+bool operator<(const SValKey&other)const
+{
+if(value.canConvert(QVariant::UInt)&&other.value.canConvert(QVariant::UInt))
+return value.toUInt()<value.toUInt();
+if(value.canConvert(QVariant::String)&&other.value.canConvert(QVariant::String))
+return value.toString()<value.toString();
+return false;
+}
+};
 
-  };
+QList<SValKey> _translation;
+QVariant _defaultValue;
+QVariant _defaultKey;
+translationPolicy _keyToValuePolicy;
+translationPolicy _valueToKeyPolicy;
+bool _enabled;
+bool _valid;
+public:
+PropertyItemTranslateTable();
+PropertyItemTranslateTable(const PropertyItemTranslateTable&other);
+~PropertyItemTranslateTable();
+virtual QVariant keyFromValue(QVariant value)const;
+virtual QVariant keyToValue(QVariant key)const;
+virtual void addToTable(const QMetaEnum&enumToAdd);
+virtual void addToTable(const QVariant &value,const QVariant &key);
+bool hasDefaultValue()const;
+void setDefaultValue(const QVariant&defaultValue=QVariant());
+QVariant defaultValue()const;
+bool hasDefaultKey()const;
+void setDefaultKey(const QVariant&defaultKey=QVariant());
+QVariant defaultKey()const;
+void removeValue(const QVariant &value);
+bool hasValue(const QVariant &value);
+void setKeyToValuePolicy(translationPolicy policy);
+int keyToValuePolicy()const;
+void setValueToKeyPolicy(translationPolicy policy);
+int valueToKeyPolicy()const;
+bool enabled() const;
+void setEnable(bool enable);
+bool valid()const;
+void setValid(bool valid);
+};
+
+
+class PropertyItemFlagTable : public PropertyItemTranslateTable
+{
+
+public:
+PropertyItemFlagTable();
+PropertyItemFlagTable(const PropertyItemFlagTable&other);
+~PropertyItemFlagTable();
+
+virtual QVariant keyFromValue(QVariant value)const;
+virtual QVariant keyToValue(QVariant key)const;
+virtual void addToTable(const QVariant &value,const QVariant &key);
+
+
+};
 #endif

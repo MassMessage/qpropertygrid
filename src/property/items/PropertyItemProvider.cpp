@@ -30,6 +30,11 @@
 ***************************************************************************/
 #include "PropertyItemProvider.h"
 #include "defaulttype/TypeBool.h"
+#include "defaulttype/TypeSize.h"
+#include "defaulttype/TypeRect.h"
+#include "defaulttype/TypeInt.h"
+#include "defaulttype/TypeFont.h"
+#include "defaulttype/TypeCursor.h"
 PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVariant&value, PropertyItem *parent ) const {
   switch ( value.type() ) {
       case QVariant::Invalid:
@@ -49,7 +54,7 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::Color:
       break;
       case QVariant::Cursor:
-      break;
+      return new PropertyItemCursor(name, value, parent );
       case QVariant::Date:
       break;
       case QVariant::DateTime:
@@ -57,13 +62,13 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::Double:
       break;
       case QVariant::Font:
-      break;
+      return new PropertyItemFont(name, value, parent );
       case QVariant::Icon :
       break;
       case QVariant::Image:
       break;
       case QVariant::Int:
-      break;
+      return new PropertyItemInt(name, value, parent );
       case QVariant::KeySequence:
       break;
       case QVariant::Line:
@@ -93,7 +98,7 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::Polygon :
       break;
       case QVariant::Rect:
-      break;
+      return new PropertyItemRect(name, value, parent );
       case QVariant::RectF:
       break;
       case QVariant::RegExp:
@@ -101,7 +106,7 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::Region:
       break;
       case QVariant::Size:
-      break;
+      return new PropertyItemSize(name, value, parent );
       case QVariant::SizeF:
       break;
       case QVariant::SizePolicy:

@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/property/images/cursors" >
+        <file>img/arrow.png</file>
+        <file>img/cross.png</file>
+        <file>img/hand.png</file>
+        <file>img/ibeam.png</file>
+        <file>img/no.png</file>
+        <file>img/sizeall.png</file>
+        <file>img/sizeb.png</file>
+        <file>img/sizef.png</file>
+        <file>img/sizeh.png</file>
+        <file>img/sizev.png</file>
+        <file>img/uparrow.png</file>
+        <file>img/vsplit.png</file>
+        <file>img/wait.png</file>
+    </qresource>
+</RCC>

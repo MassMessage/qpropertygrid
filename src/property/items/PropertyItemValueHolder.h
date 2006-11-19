@@ -31,15 +31,24 @@
 #ifndef PROPERTYITEMVALUEHOLDER_H
 #define PROPERTYITEMVALUEHOLDER_H
 #include <QVariant>
+#include "PropertyItemTranslateTable.h"
 class PropertyItem;
-class PropertyItemValueHolder {
+class PropertyItemValueHolder : public QObject {
+Q_OBJECT;
+  protected:
+        PropertyItemTranslateTable *_table;
   public:
-    PropertyItemValueHolder( ) {};
-    PropertyItemValueHolder( const PropertyItemValueHolder& ) {};
-    virtual ~PropertyItemValueHolder() {};
+    PropertyItemValueHolder(const PropertyItemTranslateTable &table=PropertyItemTranslateTable());
+    PropertyItemValueHolder( const PropertyItemValueHolder& );
+    PropertyItemTranslateTable *getTranslationTable();
+    void setTranslationTable(const PropertyItemTranslateTable &table);
+    virtual ~PropertyItemValueHolder();
     virtual void set( const PropertyItem *item, const QVariant &value = QVariant() ) = 0;
     virtual QVariant get( const PropertyItem *item ) = 0;
-    virtual QVariant getForRenderer(const PropertyItem *item ){return get(item);};
+    virtual QVariant getForRenderer(const PropertyItem *item );
+
+
+
 
   };
 #endif

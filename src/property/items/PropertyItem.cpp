@@ -35,11 +35,10 @@ PropertyItem::PropertyItem( QString name, PropertyItem *parent, PropertyItemValu
     , TreeContainer<PropertyItem>( parent )
     , _valueHolder( setGet )
     , _columnCount( 2 )
-    , _flags( 0 )      //invalid entres autres
+    , _flags( 0 )         //invalid entres autres
 , _data() {
   setName( name );
   setValid( true );
-  setData( rollRole, true );
   }
 
 
@@ -73,8 +72,18 @@ void PropertyItem::setData( const QVariant &data ) {
 
 QVariant PropertyItem::data( int id ) const {
   if ( id == valueRole )
-    return _valueHolder->get
-           ( this );
+  {
+    if(_valueHolder==0)
+      qDebug()<<"Error when access data for ";
+    else
+    return _valueHolder->get ( this );
+  }
+    if(id==valueToRender)
+    { if(_valueHolder==0)
+      qDebug()<<"Error when access data0000 for ";
+    else
+       return _valueHolder->getForRenderer( this);
+    }
   if ( !_data.contains( id ) )
     return QVariant();
   return _data[ id ];
@@ -82,8 +91,11 @@ QVariant PropertyItem::data( int id ) const {
 
 void PropertyItem::setData( int id, const QVariant &extra ) {
   if ( id == valueRole )
-    return _valueHolder->set
-           ( this, extra );
+    {
+        _valueHolder->set ( this, extra );
+        emit dataChanged( _valueHolder->get ( this ));
+        }
+        else
   _data[ id ] = extra;
   }
 
@@ -99,13 +111,13 @@ const PropertyItemValueHolder* PropertyItem::valueHolder() const {
   }
 
 void PropertyItem::setSameRendererForBoth( QString name ) {
-setValueRenderer(name);
-setNameRenderer(name);
+  setValueRenderer( name );
+  setNameRenderer( name );
   }
 
 void PropertyItem::setRenderers( QString nameRendererName, QString valueRendererName ) {
-setNameRenderer(nameRendererName);
-setValueRenderer(valueRendererName);
+  setNameRenderer( nameRendererName );
+  setValueRenderer( valueRendererName );
 
 
   }
@@ -130,7 +142,7 @@ void PropertyItem::setNameRenderer( QString name ) {
     setData( nameRendererRole, QVariant() );
   }
 
-QString PropertyItem::nameRenderer() const{
+QString PropertyItem::nameRenderer() const {
   QVariant val = data( nameRendererRole );
   if ( val.isValid() && val.canConvert( QVariant::String ) )
     return val.toString();
@@ -164,16 +176,22 @@ bool PropertyItem::isSystem() const {
 bool PropertyItem::isReadonly() const {
   return _flags & flgRDOnly;
   }
+bool PropertyItem::isMeta() const {
+  return _flags & flgMeta;
+}
+ bool PropertyItem::isGroupCollectable() const {
+return !(_flags&flgNoGroupCollectable);
 
+ }
 void PropertyItem::setValid( bool valid ) {
   if ( valid )
     _flags |= flgValid;
   else
-    _flags |= ~flgValid;
+    _flags &= ~flgValid;
   }
 void PropertyItem::setVisible( bool visible ) {
   if ( visible )
-    _flags |= ~flgHidden;
+    _flags &= ~flgHidden;
   else
     _flags |= flgHidden;
   }
@@ -182,28 +200,44 @@ void PropertyItem::setSection( bool section ) {
   if ( section )
     _flags |= flgSection;
   else
-    _flags |= ~flgSection;
+    _flags &= ~flgSection;
   }
 
 void PropertyItem::setGroup( bool grp ) {
   if ( grp )
     _flags |= flgGroup;
   else
-    _flags |= ~flgGroup;
+    _flags &= ~flgGroup;
   }
 
 void PropertyItem::setSystem( bool sys ) {
   if ( sys )
     _flags |= flgSystem;
   else
-    _flags |= ~flgSystem;
+    _flags &= ~flgSystem;
   }
 void PropertyItem::setReadOnly( bool rd ) {
   if ( rd )
     _flags |= flgRDOnly;
   else
-    _flags |= ~flgRDOnly;
+    _flags &= ~flgRDOnly;
   }
 
+    void PropertyItem::setMeta(bool mt)
+    {
+if ( mt )
+    _flags |= flgMeta;
+  else
+    _flags &= ~flgMeta;
 
+    }
+
+    void PropertyItem::setGroupCollectable(bool gc)
+    {
+if ( gc )
+    _flags &= ~flgNoGroupCollectable;
+  else
+    _flags |= flgNoGroupCollectable;
+
+    }
 

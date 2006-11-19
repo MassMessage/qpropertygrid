@@ -30,11 +30,15 @@
 ***************************************************************************/
 #include "delegate/PropertyDelegateFactory.h"
 #include "delegate/renderers/PropertyRendererSection.h"
+#include "delegate/renderers/PropertyRendererGroup.h"
 #include "defaulttype/TypeBool.h"
+#include "defaulttype/TypeCursor.h"
 const QString PropertyDelegateFactory::K_DEFAULT_KEY = "##DEFAULT##";
 
 
 void PropertyDelegateFactory:: onSingletonConstruct() {
   instance().add<PropertyRendererSection>( PropertyRendererSection::K_ID );
+instance().add<PropertyRendererGroup>( PropertyRendererGroup::K_ID );
   instance().add<PropertyRendererBool>(PropertyRendererBool::K_ID);
+  instance().add<PropertyRendererCursor>(PropertyRendererCursor::K_ID);
   }

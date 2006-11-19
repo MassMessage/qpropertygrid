@@ -55,7 +55,7 @@ class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
       valueRole, /*!<obtenir la valeur de la propriete*/
       valueRendererRole, /*!<obtenir le renderer pour la valeur de la propriete*/
       valueEditorRole, /*!<obtenir l'editeur pour la valeur*/
-      rollRole,  /*!<Si la proprietes a des fils, sont t'ils caches (visuellement)*/
+      valueToRender, /*!<obtenir la valeur a afficher*/
       endvalue /*!<marque la fin de l'enum*/
   };
 
@@ -68,7 +68,8 @@ class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
       flgHidden = 0x10,
       flgSystem = 0x20,
       flgRDOnly = 0x40,
-      flgMeta = 0x80
+      flgMeta = 0x80,
+      flgNoGroupCollectable = 0x100,
   };
 
   public:
@@ -101,12 +102,20 @@ class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
     bool isAGroup() const;
     bool isSystem() const;
     bool isReadonly() const;
+    bool isMeta() const;
+    bool isGroupCollectable() const;
     void setValid( bool );
     void setVisible( bool );
     void setSection( bool );
     void setGroup( bool );
     void setSystem( bool );
     void setReadOnly( bool );
+    void setMeta(bool);
+    void setGroupCollectable(bool);
+
+signals:
+void dataChanged(QVariant newValue);
+
   };
 
 

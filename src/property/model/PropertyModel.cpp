@@ -62,7 +62,7 @@ QVariant PropertyModel::data ( const QModelIndex & index, int role) const
     {
         if(index.column()==0)
             return item->name();
-        return item->data();
+        return item->data(PropertyItem::valueToRender);
     }
     return item->data(role);
 

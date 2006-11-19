@@ -3,6 +3,16 @@
 # Subdir relative project main directory: ./src/property
 # Target is a library:  qproperty
 
+RESOURCES = resources/property.qrc 
+INCLUDEPATH += ../../src/property 
+MOC_DIR = .moc 
+UI_DIR = .ui 
+OBJECTS_DIR = .obj 
+TARGET = qproperty 
+CONFIG += debug \
+          warn_on \
+          staticlib 
+TEMPLATE = lib 
 HEADERS += core/TreeContainer.h \
            items/PropertyItem.h \
            items/PropertyItemValueHolder.h \
@@ -20,7 +30,13 @@ HEADERS += core/TreeContainer.h \
            defaulttype/TypeBool.h \
            items/PropertyItemProvider.h \
            defaulttype/TypeSize.h \
-           items/PropertyItemGroup.h 
+           items/PropertyItemGroup.h \
+           delegate/renderers/PropertyRendererGroup.h \
+           items/PropertyItemTranslateTable.h \
+           defaulttype/TypeRect.h \
+           defaulttype/TypeInt.h \
+           defaulttype/TypeFont.h \
+           defaulttype/TypeCursor.h 
 SOURCES += items/PropertyItem.cpp \
            items/PropertyItemDefaultValueHolder.cpp \
            model/PropertyModel.cpp \
@@ -33,13 +49,13 @@ SOURCES += items/PropertyItem.cpp \
            delegate/PropertyDelegateFactory.cpp \
            items/PropertyItemDefaultFactory.cpp \
            defaulttype/TypeBool.cpp \
-           items/PropertyItemProvider.cpp 
-INCLUDEPATH += ../../src/property
-MOC_DIR = .moc
-UI_DIR = .ui
-OBJECTS_DIR = .obj
-TARGET = qproperty
-CONFIG += debug \
-warn_on \
-staticlib
-TEMPLATE = lib
+           items/PropertyItemProvider.cpp \
+           items/PropertyItemGroup.cpp \
+           delegate/renderers/PropertyRendererGroup.cpp \
+           defaulttype/TypeSize.cpp \
+           items/PropertyItemTranslateTable.cpp \
+           items/PropertyItemValueHolder.cpp \
+           defaulttype/TypeRect.cpp \
+           defaulttype/TypeInt.cpp \
+           defaulttype/TypeFont.cpp \
+           defaulttype/TypeCursor.cpp 

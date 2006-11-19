@@ -28,22 +28,37 @@
 *   you do not wish to do so, delete this exception statement from        *
 *   your version.                                                         *
 ***************************************************************************/
-#ifndef PROPERTYITEMFROMQOBJECT_H
-#define PROPERTYITEMFROMQOBJECT_H
-#include "core/Abstractfactory.h"
-class PropertyItem;
-class PropertyItemFromQObject : public QObject {
+#include "items/PropertyItemValueHolder.h"
+#include "items/PropertyItem.h"
+#include <QDebug>
 
-    Q_OBJECT;
-  protected:
-        bool _skipRO;
-    Factory<>*_itemFactory;
-    void importPropertyForClass( const QObject *object, const QMetaObject *metaobject = 0, PropertyItem*parent = 0 );
-    PropertyItem*  buildPropertyItem(const QObject *object,QMetaProperty &qmprop,PropertyItem *parent=0);
-  public:
-    PropertyItemFromQObject( Factory<>*fact, QObject *parent = 0 );
-    PropertyItem*importFrom(const QObject *obj,bool skipReadOnly=true,PropertyItem*parent=0,bool createSection=true);
-  };
 
-#endif
+PropertyItemValueHolder::PropertyItemValueHolder( const PropertyItemTranslateTable &table )
+    : QObject( 0 )
+, _table( 0 ) {
+  _table = new PropertyItemTranslateTable( table );
+  }
+PropertyItemValueHolder::PropertyItemValueHolder( const PropertyItemValueHolder& ) {}
+
+PropertyItemValueHolder::~PropertyItemValueHolder() {
+  if ( _table )
+    delete _table;
+  }
+
+PropertyItemTranslateTable* PropertyItemValueHolder::getTranslationTable() {
+  return _table;
+  }
+
+void PropertyItemValueHolder::setTranslationTable( const PropertyItemTranslateTable &table ) {
+  if ( _table )
+    delete _table;
+  _table = new PropertyItemTranslateTable( table );
+  }
+
+QVariant PropertyItemValueHolder::getForRenderer( const PropertyItem *item ) {
+  if ( _table && _table->valid() && _table->enabled() )
+    return _table->keyFromValue( get ( item ) );
+  return get( item );
+  }
+
 

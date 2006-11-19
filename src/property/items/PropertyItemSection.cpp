@@ -35,7 +35,9 @@ PropertyItemSection::PropertyItemSection(QString name,PropertyItem *parent)
 	{
 	setSection(true);
 	setReadOnly(true);
-        setSameRendererForBoth(PropertyRendererSection::K_ID);
+
+setNameRenderer( PropertyRendererSection::K_ID);
+        setValueRenderer( "");
         //setData(nameRendererRole,PropertySectionRenderer::RENDER_KEY);
 	//setData(valueRendererRole,PropertySectionRenderer::RENDER_KEY);
 	}

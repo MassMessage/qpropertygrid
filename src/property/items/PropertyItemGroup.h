@@ -32,6 +32,17 @@
 #define PROPERTYITEMGROUPITEM_H
 #include "items/PropertyItem.h"
 
+class PropertyItemGroupValue:public PropertyItemValueHolder
+{
+public:
+
+PropertyItemGroupValue( const PropertyItemTranslateTable &table=PropertyItemTranslateTable());
+
+
+virtual void set( const PropertyItem *item, const QVariant &value = QVariant() );
+    virtual QVariant get( const PropertyItem *item );
+virtual QVariant getForRenderer(const PropertyItem *item );
+};
 
 class PropertyItemGroup : public PropertyItem
 {
