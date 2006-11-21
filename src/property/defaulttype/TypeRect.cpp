@@ -28,50 +28,53 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#include "mainform.h"
-#include <QMouseEvent>
+#include "defaulttype/TypeRect.h"
+#include "defaulttype/TypeInt.h"
 #include <QDebug>
-#include "items/PropertyItem.h"
-#include "items/PropertyItemFromQObject.h"
-#include "delegate/PropertyDelegate.h"
-#include "items/PropertyItemDefaultFactory.h"
-#include "defaulttype/TypeColor.h"
-#include "defaulttype/TypePixmap.h"
-sampleForm::sampleForm()
-:QMainWindow(0)
-,Ui_MainWindow()
-,_tree()
-{
-setupUi(this);
-_tree.show();
-connect(getPropButton,SIGNAL(clicked(bool)),this,SLOT(onSelectWidget(bool)));
-}
-
-void sampleForm::mouseReleaseEvent( QMouseEvent * event )
-{
-releaseMouse();
-QWidget *w=childAt(event->pos());
-if(!w)
-{
-  qDebug("Pas de widget");
-return;
-}
-PropertyModel *model=new PropertyModel();
-PropertyItemFromQObject *conv=new PropertyItemFromQObject(&PropertyItemDefaultFactory::instance());
-PropertyItem *it=conv->importFrom(w,true,0);
-model->add( new PropertyItemColor("une couleur",QColor(0,255,0)));
-model->add( new PropertyItemPixmap("un Pixmap",QPixmap("blender.png")));
-model->add(it);
-_tree.setModel(model);
-_tree.setItemDelegate(new PropertyDelegate());
-_tree.show();
-
-
+PropertyItemRect::PropertyItemRect( QString name, const QVariant &value, PropertyItem *parent )
+:PropertyItemGroup(name,parent) {
+setData(PropertyItem::valueRole,value);
+QRect rec=data().toRect();
+PropertyItem *it=new PropertyItemInt("X",rec.x(),this);
+it->setMeta(true);
+connect(it,SIGNAL(dataChanged(QVariant)),this,SLOT(onXChange(QVariant)));
+it=new PropertyItemInt("Y",rec.y(),this);
+it->setMeta(true);
+connect(it,SIGNAL(dataChanged(QVariant)),this,SLOT(onYChange(QVariant)));
+it=new PropertyItemInt("Width",rec.width(),this);
+it->setMeta(true);
+connect(it,SIGNAL(dataChanged(QVariant)),this,SLOT(onWidthChange(QVariant)));
+it=new PropertyItemInt("Height",rec.height(),this);
+it->setMeta(true);
+connect(it,SIGNAL(dataChanged(QVariant)),this,SLOT(onHeightChange(QVariant)));
 }
 
 
-void sampleForm::onSelectWidget(bool)
+void PropertyItemRect::onXChange(QVariant newValue)
 {
+QRect rec=data().toRect();
+rec.setX(newValue.toInt());
+setData(PropertyItem::valueRole,rec);
+}
 
-grabMouse();
+void PropertyItemRect::onYChange(QVariant newValue)
+{
+QRect rec=data().toRect();
+rec.setY(newValue.toInt());
+setData(PropertyItem::valueRole,rec);
+}
+
+
+void PropertyItemRect::onWidthChange(QVariant newValue)
+{
+QRect rec=data().toRect();
+rec.setWidth(newValue.toInt());
+setData(PropertyItem::valueRole,rec);
+}
+
+void PropertyItemRect::onHeightChange(QVariant newValue)
+{
+QRect rec=data().toRect();
+rec.setHeight(newValue.toInt());
+setData(PropertyItem::valueRole,rec);
 }

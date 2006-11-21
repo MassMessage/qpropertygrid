@@ -28,50 +28,12 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#include "mainform.h"
-#include <QMouseEvent>
-#include <QDebug>
-#include "items/PropertyItem.h"
-#include "items/PropertyItemFromQObject.h"
-#include "delegate/PropertyDelegate.h"
-#include "items/PropertyItemDefaultFactory.h"
-#include "defaulttype/TypeColor.h"
-#include "defaulttype/TypePixmap.h"
-sampleForm::sampleForm()
-:QMainWindow(0)
-,Ui_MainWindow()
-,_tree()
-{
-setupUi(this);
-_tree.show();
-connect(getPropButton,SIGNAL(clicked(bool)),this,SLOT(onSelectWidget(bool)));
-}
+#include "defaulttype/TypeInt.h"
 
-void sampleForm::mouseReleaseEvent( QMouseEvent * event )
-{
-releaseMouse();
-QWidget *w=childAt(event->pos());
-if(!w)
-{
-  qDebug("Pas de widget");
-return;
-}
-PropertyModel *model=new PropertyModel();
-PropertyItemFromQObject *conv=new PropertyItemFromQObject(&PropertyItemDefaultFactory::instance());
-PropertyItem *it=conv->importFrom(w,true,0);
-model->add( new PropertyItemColor("une couleur",QColor(0,255,0)));
-model->add( new PropertyItemPixmap("un Pixmap",QPixmap("blender.png")));
-model->add(it);
-_tree.setModel(model);
-_tree.setItemDelegate(new PropertyDelegate());
-_tree.show();
+PropertyItemInt::PropertyItemInt( QString name, const QVariant &value, PropertyItem *parent )
+:PropertyItem(name,parent) {
+ setData(value);
 
 
 }
 
-
-void sampleForm::onSelectWidget(bool)
-{
-
-grabMouse();
-}

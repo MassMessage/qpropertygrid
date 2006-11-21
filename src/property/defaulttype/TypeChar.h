@@ -28,50 +28,19 @@
  *   you do not wish to do so, delete this exception statement from        *
  *   your version.                                                         *
  ***************************************************************************/
-#include "mainform.h"
-#include <QMouseEvent>
-#include <QDebug>
+#ifndef DEFAULTITEMCHAR_H
+#define DEFAULTITEMCHAR_H
 #include "items/PropertyItem.h"
-#include "items/PropertyItemFromQObject.h"
-#include "delegate/PropertyDelegate.h"
-#include "items/PropertyItemDefaultFactory.h"
-#include "defaulttype/TypeColor.h"
-#include "defaulttype/TypePixmap.h"
-sampleForm::sampleForm()
-:QMainWindow(0)
-,Ui_MainWindow()
-,_tree()
+#include "items/PropertyItemProvider.h"
+#include "delegate/PropertyRenderer.h"
+
+
+class PropertyItemChar : public PropertyItem
 {
-setupUi(this);
-_tree.show();
-connect(getPropButton,SIGNAL(clicked(bool)),this,SLOT(onSelectWidget(bool)));
-}
+        Q_OBJECT;
+public:
+        PropertyItemChar(QString name,const QVariant &value=QVariant(),PropertyItem *parent=0);
 
-void sampleForm::mouseReleaseEvent( QMouseEvent * event )
-{
-releaseMouse();
-QWidget *w=childAt(event->pos());
-if(!w)
-{
-  qDebug("Pas de widget");
-return;
-}
-PropertyModel *model=new PropertyModel();
-PropertyItemFromQObject *conv=new PropertyItemFromQObject(&PropertyItemDefaultFactory::instance());
-PropertyItem *it=conv->importFrom(w,true,0);
-model->add( new PropertyItemColor("une couleur",QColor(0,255,0)));
-model->add( new PropertyItemPixmap("un Pixmap",QPixmap("blender.png")));
-model->add(it);
-_tree.setModel(model);
-_tree.setItemDelegate(new PropertyDelegate());
-_tree.show();
+};
 
-
-}
-
-
-void sampleForm::onSelectWidget(bool)
-{
-
-grabMouse();
-}
+#endif

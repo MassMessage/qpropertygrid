@@ -3,16 +3,7 @@
 # Subdir relative project main directory: ./src/property
 # Target is a library:  qproperty
 
-RESOURCES = resources/property.qrc 
-INCLUDEPATH += ../../src/property 
-MOC_DIR = .moc 
-UI_DIR = .ui 
-OBJECTS_DIR = .obj 
-TARGET = qproperty 
-CONFIG += debug \
-          warn_on \
-          staticlib 
-TEMPLATE = lib 
+RESOURCES += resources/property.qrc 
 HEADERS += core/TreeContainer.h \
            items/PropertyItem.h \
            items/PropertyItemValueHolder.h \
@@ -36,7 +27,12 @@ HEADERS += core/TreeContainer.h \
            defaulttype/TypeRect.h \
            defaulttype/TypeInt.h \
            defaulttype/TypeFont.h \
-           defaulttype/TypeCursor.h 
+           defaulttype/TypeCursor.h \
+           defaulttype/TypeColor.h \
+           defaulttype/TypePixmap.h \
+           core/Abstractfactory.h \
+           defaulttype/TypeChar.h \
+           items/PropertyItemValueChecker.h 
 SOURCES += items/PropertyItem.cpp \
            items/PropertyItemDefaultValueHolder.cpp \
            model/PropertyModel.cpp \
@@ -58,4 +54,17 @@ SOURCES += items/PropertyItem.cpp \
            defaulttype/TypeRect.cpp \
            defaulttype/TypeInt.cpp \
            defaulttype/TypeFont.cpp \
-           defaulttype/TypeCursor.cpp 
+           defaulttype/TypeCursor.cpp \
+           defaulttype/TypeColor.cpp \
+           defaulttype/TypePixmap.cpp \
+           defaulttype/TypeChar.cpp \
+           items/PropertyItemValueChecker.cpp 
+INCLUDEPATH += ../../src/property
+MOC_DIR = .moc
+UI_DIR = .ui
+OBJECTS_DIR = .obj
+TARGET = qproperty
+CONFIG += debug \
+warn_on \
+staticlib
+TEMPLATE = lib
