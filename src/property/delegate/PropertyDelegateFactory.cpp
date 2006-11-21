@@ -33,12 +33,17 @@
 #include "delegate/renderers/PropertyRendererGroup.h"
 #include "defaulttype/TypeBool.h"
 #include "defaulttype/TypeCursor.h"
+#include "defaulttype/TypeColor.h"
+#include "defaulttype/TypePixmap.h"
 const QString PropertyDelegateFactory::K_DEFAULT_KEY = "##DEFAULT##";
 
 
 void PropertyDelegateFactory:: onSingletonConstruct() {
   instance().add<PropertyRendererSection>( PropertyRendererSection::K_ID );
-instance().add<PropertyRendererGroup>( PropertyRendererGroup::K_ID );
-  instance().add<PropertyRendererBool>(PropertyRendererBool::K_ID);
-  instance().add<PropertyRendererCursor>(PropertyRendererCursor::K_ID);
+  instance().add<PropertyRendererGroup>( PropertyRendererGroup::K_ID );
+  instance().add<PropertyRendererBool>( PropertyRendererBool::K_ID );
+  instance().add<PropertyRendererCursor>( PropertyRendererCursor::K_ID );
+  instance().add<PropertyRendererColor>( PropertyRendererColor::K_ID );
+  instance().add<PropertyRendererPixmap>( PropertyRendererPixmap::K_ID );
+
   }
