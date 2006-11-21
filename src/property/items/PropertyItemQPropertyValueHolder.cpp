@@ -32,6 +32,7 @@
 #include "items/PropertyItem.h"
 #include <QStringList>
 #include <QDebug>
+#include "PropertyItemTranslateTable.h"
 PropertyItemQPropertyValueHolder::PropertyItemQPropertyValueHolder( QMetaProperty property, QObject *object )
     : PropertyItemValueHolder()
     , _meta( property )
@@ -39,14 +40,17 @@ PropertyItemQPropertyValueHolder::PropertyItemQPropertyValueHolder( QMetaPropert
 
 
   if ( _meta.isEnumType() ) {
-    _table->addToTable( _meta.enumerator() );
-    _table->setValid( true );
+   PropertyItemTranslateTable *table=new PropertyItemTranslateTable();
+    table->addToTable( _meta.enumerator() );
+    table->setValid( true );
+    setValueChecker(table);
     }
 
   if ( _meta.isFlagType() ) {
-    setTranslationTable( PropertyItemFlagTable() );
-    _table->addToTable( _meta.enumerator() );
-    _table->setValid( true );
+    PropertyItemFlagTable *table=new PropertyItemFlagTable();
+    table->addToTable( _meta.enumerator() );
+    table->setValid( true );
+    setValueChecker(table);
     }
 
 

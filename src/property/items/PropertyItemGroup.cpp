@@ -32,8 +32,8 @@
 #include "delegate/renderers/PropertyRendererGroup.h"
 
 
-PropertyItemGroupValue::PropertyItemGroupValue( const PropertyItemTranslateTable &table )
-:PropertyItemValueHolder(table)
+PropertyItemGroupValue::PropertyItemGroupValue( PropertyItemValueChecker *checker)
+:PropertyItemValueHolder(checker)
 {
 
 

@@ -31,17 +31,19 @@
 #ifndef PROPERTYITEMVALUEHOLDER_H
 #define PROPERTYITEMVALUEHOLDER_H
 #include <QVariant>
-#include "PropertyItemTranslateTable.h"
+//#include "PropertyItemTranslateTable.h"
+#include "items/PropertyItemValueChecker.h"
+
 class PropertyItem;
 class PropertyItemValueHolder : public QObject {
 Q_OBJECT;
   protected:
-        PropertyItemTranslateTable *_table;
+        PropertyItemValueChecker *_checker;
   public:
-    PropertyItemValueHolder(const PropertyItemTranslateTable &table=PropertyItemTranslateTable());
+    PropertyItemValueHolder( PropertyItemValueChecker *checker=0);
     PropertyItemValueHolder( const PropertyItemValueHolder& );
-    PropertyItemTranslateTable *getTranslationTable();
-    void setTranslationTable(const PropertyItemTranslateTable &table);
+    PropertyItemValueChecker *getValueChecker();
+    void setValueChecker( PropertyItemValueChecker *checker);
     virtual ~PropertyItemValueHolder();
     virtual void set( const PropertyItem *item, const QVariant &value = QVariant() ) = 0;
     virtual QVariant get( const PropertyItem *item ) = 0;

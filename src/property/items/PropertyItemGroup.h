@@ -36,7 +36,7 @@ class PropertyItemGroupValue:public PropertyItemValueHolder
 {
 public:
 
-PropertyItemGroupValue( const PropertyItemTranslateTable &table=PropertyItemTranslateTable());
+PropertyItemGroupValue(  PropertyItemValueChecker *checker=0);
 
 
 virtual void set( const PropertyItem *item, const QVariant &value = QVariant() );

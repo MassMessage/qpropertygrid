@@ -33,31 +33,31 @@
 #include <QDebug>
 
 
-PropertyItemValueHolder::PropertyItemValueHolder( const PropertyItemTranslateTable &table )
+PropertyItemValueHolder::PropertyItemValueHolder( PropertyItemValueChecker *checker )
     : QObject( 0 )
-, _table( 0 ) {
-  _table = new PropertyItemTranslateTable( table );
+, _checker( checker ) {
+
   }
 PropertyItemValueHolder::PropertyItemValueHolder( const PropertyItemValueHolder& ) {}
 
 PropertyItemValueHolder::~PropertyItemValueHolder() {
-  if ( _table )
-    delete _table;
+  if ( _checker )
+    delete _checker;
   }
 
-PropertyItemTranslateTable* PropertyItemValueHolder::getTranslationTable() {
-  return _table;
+    PropertyItemValueChecker *PropertyItemValueHolder::getValueChecker() {
+  return _checker;
   }
 
-void PropertyItemValueHolder::setTranslationTable( const PropertyItemTranslateTable &table ) {
-  if ( _table )
-    delete _table;
-  _table = new PropertyItemTranslateTable( table );
+void PropertyItemValueHolder::setValueChecker(PropertyItemValueChecker *checker) {
+  if ( _checker )
+    delete _checker;
+  _checker =  checker;
   }
 
 QVariant PropertyItemValueHolder::getForRenderer( const PropertyItem *item ) {
-  if ( _table && _table->valid() && _table->enabled() )
-    return _table->keyFromValue( get ( item ) );
+  if ( _checker && _checker->valid() && _checker->enabled() )
+    return _checker->checkoutValue( get ( item ) );
   return get( item );
   }
 

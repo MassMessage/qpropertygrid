@@ -40,9 +40,19 @@ _value=other._value;
 }
 
 void PropertyItemDefaultValueHolder::set( const PropertyItem *, const QVariant &value ) {
+
+if ( _checker && _checker->valid() && _checker->enabled() )
+{
+QVariant write=_checker->checkinValue(value);
+if(write.isValid())
+  _value=write;
+return;
+}
 _value=value;
 }
 
 QVariant PropertyItemDefaultValueHolder::get( const PropertyItem * ) {
+if ( _checker && _checker->valid() && _checker->enabled() )
+return _checker->checkoutValue(_value,true);
 return _value;
   }

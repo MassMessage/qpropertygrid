@@ -35,6 +35,8 @@
 #include "defaulttype/TypeInt.h"
 #include "defaulttype/TypeFont.h"
 #include "defaulttype/TypeCursor.h"
+#include "defaulttype/TypeColor.h"
+#include "defaulttype/TypePixmap.h"
 PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVariant&value, PropertyItem *parent ) const {
   switch ( value.type() ) {
       case QVariant::Invalid:
@@ -42,6 +44,7 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::BitArray:
       break;
       case QVariant::Bitmap :
+       return new PropertyItemPixmap( name, value, parent );
       break;
       case QVariant::Bool:
       return new PropertyItemBool( name, value, parent );
@@ -52,7 +55,7 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::Char:
       break;
       case QVariant::Color:
-      break;
+      return new PropertyItemColor(name, value, parent );
       case QVariant::Cursor:
       return new PropertyItemCursor(name, value, parent );
       case QVariant::Date:
@@ -64,8 +67,10 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::Font:
       return new PropertyItemFont(name, value, parent );
       case QVariant::Icon :
+         return new PropertyItemPixmap( name, value, parent );
       break;
       case QVariant::Image:
+         return new PropertyItemPixmap( name, value, parent );
       break;
       case QVariant::Int:
       return new PropertyItemInt(name, value, parent );
@@ -90,6 +95,7 @@ PropertyItem* PropertyItemProvider::fromQVariant( const QString &name, const QVa
       case QVariant::Pen:
       break;
       case QVariant::Pixmap:
+         return new PropertyItemPixmap( name, value, parent );
       break;
       case QVariant::Point:
       break;

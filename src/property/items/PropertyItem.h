@@ -69,7 +69,7 @@ class PropertyItem : public QObject , public TreeContainer<PropertyItem> {
       flgSystem = 0x20,
       flgRDOnly = 0x40,
       flgMeta = 0x80,
-      flgNoGroupCollectable = 0x100,
+      flgNoGroupCollectable = 0x100
   };
 
   public:
